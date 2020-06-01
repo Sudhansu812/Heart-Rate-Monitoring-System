@@ -7,6 +7,13 @@
 %     5. Sonu Kumar
 
 clearvars
+
+%User Details
+name = input('Name : ', 's');
+ID = input('ID : ', 's');
+age = input('Age : ');
+mno = input('Mobile Number : ', 's');
+
 %Read the video, number of frames, frame rate and create an array of
 %nFrames x 1
 vidObj    = VideoReader( "D:\Minor\Repos\test9.mp4");
@@ -35,6 +42,9 @@ set( gca, 'YTick', [0, 1], 'YDir', 'reverse');
 xlabel('Time [s]');
 ylabel('Amplitude');
 
+
+filtered = medfilt1(gCom,9);
+
 %Creating a threshold to get rid of the unwanted parts of the signal in the
 %later part but in this part the higher white values are to be filtered
 %as they have too much noise, the lower white value parts are untouched for 
@@ -44,8 +54,6 @@ gPeak = max(gCom);
 gLow = min(gCom);
 plDiff = gPeak - gLow;
 threshold = gLow + (0.45*plDiff);
-
-filtered = medfilt1(gCom,9);
 
 for i = 1 : nFrames
     if(gCom(i) > threshold)
@@ -83,8 +91,9 @@ ylabel('Amplitude');
 
 %This part is made just to count the number of beats and display them.
 %Impulse signal is just made to better visualize not mandatory to have.
+
 c=1;
-prev = gFin(i);
+prev = gFin(1);
 for i=1:len
     if(gFin(i) ~= prev)
         imp(c) = prev;
@@ -98,17 +107,20 @@ for i=1:len
     end
 end
 
+%Fetching the current date and time
+format longG;
+t = now;
+d = datetime(t,'ConvertFrom','datenum');
+
 %Printing of the heart rate, as the video is of 10 seconds six is
 %multiplied
 hRate = int32(fix(c/2))*6;
 subplot(414);
 stem(imp, 'b');
 title('Impulse Plot');
-set(gca,'YTick',[-0.5,1.5]);
+set(gca,'YTick',[-0.5,1]);
 axis([0 2*pi -2 2.5]);
-hold on;
-str = sprintf('Heart Rate : %d per minute',hRate);
+str = sprintf('Heart Rate : %d \nName : %s \nID : %s \nAge : %d \nMobile Number : +91%s',hRate,name,ID,age,mno);
 legend(str);
-
 
 
