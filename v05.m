@@ -14,6 +14,21 @@ ID = input('ID : ', 's');
 age = input('Age : ');
 mno = input('Mobile Number : ', 's');
 
+IDc = "ID_" + ID;
+pathToID = "D:\Minor\HeartRate v0.5\database\" + IDc + ".txt";
+access = isfile(pathToID);
+
+if(access == 0)
+    fprintf("Your data was not found in the database.");
+    quit;
+else
+%     Alternate wat to read the contents of the text file, but spaces and new lines will be ignored
+%     fileID = fopen(pathToID);
+%     userData = fscanf(fileID,'%s');
+%     fclosef(fileID);
+    userData = fileread(pathToID);
+end
+
 %Read the video, number of frames, frame rate and create an array of
 %nFrames x 1
 vidObj    = VideoReader( "D:\Minor\Repos\test9.mp4");
@@ -120,7 +135,7 @@ stem(imp, 'b');
 title('Impulse Plot');
 set(gca,'YTick',[-0.5,1]);
 axis([0 2*pi -2 2.5]);
-str = sprintf('Heart Rate : %d \nName : %s \nID : %s \nAge : %d \nMobile Number : +91%s',hRate,name,ID,age,mno);
+str = sprintf('Heart Rate : %d \nName : %s \nID : %s \nAge : %d \nMobile Number : +91%s\nUser Details:\n%s',hRate,name,ID,age,mno,userData);
 legend(str);
 
 
